@@ -16,7 +16,7 @@ dependencies:
   - brotlipy=0.7.0=py38h497a2fe_1001
   - bzip2=1.0.8=h7f98852_4
   - c-ares=1.17.1=h7f98852_1
-  - ca-certificates=2021.1.19=h06a4308_1
+  - ca-certificates=2020.12.5=ha878542_0
   - cachetools=4.2.1=pyhd8ed1ab_0
   - certifi=2020.12.5=py38h578d9bd_1
   - cffi=1.14.5=py38ha65f79e_0
@@ -64,7 +64,7 @@ dependencies:
   - oauthlib=3.0.1=py_0
   - olefile=0.46=pyh9f0ad1d_1
   - openh264=2.1.1=h780b84a_0
-  - openssl=1.1.1j=h27cfd23_0
+  - openssl=1.1.1k=h7f98852_0
   - packaging=20.9=pyhd3eb1b0_0
   - pillow=8.1.2=py38he98fc37_0
   - pip=21.0.1=py38h06a4308_0
@@ -85,6 +85,7 @@ dependencies:
   - requests-oauthlib=1.3.0=pyh9f0ad1d_0
   - rsa=4.7.2=pyh44b312d_0
   - sacremoses=master=py_0
+  - sentencepiece=0.1.95=py38h1fd1430_0
   - setuptools=52.0.0=py38h06a4308_0
   - six=1.15.0=pyh9f0ad1d_0
   - sqlite=3.35.2=hdfb4753_0

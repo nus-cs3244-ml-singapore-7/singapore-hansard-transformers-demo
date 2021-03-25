@@ -12,4 +12,5 @@ dependencies:
   - cudatoolkit=11.1
   - tensorboard
   - transformers
+  - sentencepiece
 prefix: /home/kingsley/miniconda3/envs/nlp
