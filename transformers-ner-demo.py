@@ -1,5 +1,5 @@
 import torch
-from transformers import BertTokenizerFast, BertForTokenClassification
+from transformers import XLMRobertaTokenizerFast, XLMRobertaForTokenClassification
 
 RAW_SEQUENCE = """<p>1 <strong>Mr Louis Ng Kok Kwang</strong> asked&nbsp;the Minister for Health 
 whether couples who have pre-implantation genetically screened embryos stored overseas can have 
@@ -19,31 +19,28 @@ no other findings besides the presence or absence of chromosomal aberrations are
 attending physician in our local AR centres.&nbsp;</p><p>Local AR centres which receive the 
 tested embryos must also continue to ensure compliance with the AR LTCs.</p>"""
 
+DEVICE = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+
 def main(sequence):
-    tokenizer = BertTokenizerFast.from_pretrained('bert-base-cased')
-    model = BertForTokenClassification.from_pretrained('dbmdz/bert-large-cased-finetuned-conll03-english')
-    
+    # Pretrained model from https://huggingface.co/asahi417/tner-xlm-roberta-base-ontonotes5
+    tokenizer = XLMRobertaTokenizerFast.from_pretrained('xlm-roberta-base')
+    model = XLMRobertaForTokenClassification.from_pretrained(
+        'asahi417/tner-xlm-roberta-base-ontonotes5').to(DEVICE)
+    model.eval()
+
     # Bit of a hack to get the tokens with the special tokens
     tokens = tokenizer.tokenize(tokenizer.decode(tokenizer.encode(sequence)))
-    inputs = tokenizer.encode(sequence, return_tensors="pt")
+    inputs = tokenizer.encode(sequence, return_tensors="pt").to(DEVICE)
 
-    outputs = model(inputs).logits
-    predictions = torch.argmax(outputs, dim=2)
+    with torch.no_grad():
+        outputs = model(inputs).logits
+        predictions = torch.argmax(outputs, dim=2)[0]
 
-    label_list = [
-        "O",       # Outside of a named entity
-        "B-MISC",  # Beginning of a miscellaneous entity right after another miscellaneous entity
-        "I-MISC",  # Miscellaneous entity
-        "B-PER",   # Beginning of a person's name right after another person's name
-        "I-PER",   # Person's name
-        "B-ORG",   # Beginning of an organisation right after another organisation
-        "I-ORG",   # Organisation
-        "B-LOC",   # Beginning of a location right after another location
-        "I-LOC"    # Location
-    ]
+    id2label = model.config.id2label
+    print(id2label)
 
-    for token, prediction in zip(tokens, predictions[0].numpy()):
-        print("{} - {}".format(token, label_list[prediction.item()]))
+    for token, prediction in zip(tokens, predictions):
+        print("{} - {}".format(token, id2label[prediction.item()]))
 
 if __name__ == '__main__':
     main(RAW_SEQUENCE)
