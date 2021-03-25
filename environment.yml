@@ -1,0 +1,15 @@
+name: nlp
+channels:
+  - huggingface
+  - pytorch
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.8
+  - pytorch
+  - torchaudio
+  - torchvision
+  - cudatoolkit=11.1
+  - tensorboard
+  - transformers
+prefix: /home/kingsley/miniconda3/envs/nlp
